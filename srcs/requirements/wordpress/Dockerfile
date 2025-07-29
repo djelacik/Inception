@@ -12,6 +12,7 @@ RUN apt-get update && \
         php7.4-zip \
         curl \
         wget \
+        mariadb-client \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/*
 
