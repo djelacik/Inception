@@ -75,13 +75,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ${WORDPRESS_PATH}
+      device: /home/djelacik/data/wordpress
   mariadb_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${MARIADB_PATH}
+      device: /home/djelacik/data/mariadb
 
 networks:
   inception:
