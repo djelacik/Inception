@@ -1,0 +1,27 @@
+# Inception Project - Development Environment
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Note: .env is included for development convenience in private repo
+# Remove .env from tracking before school evaluation:
+# git rm --cached srcs/.env
+# echo "srcs/.env" >> .gitignore
+
+# Real secrets (if using production secrets)
+secrets/*.key
+secrets/*.pem
