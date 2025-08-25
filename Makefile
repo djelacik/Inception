@@ -19,19 +19,19 @@ build:
 	@echo "Building Inception project..."
 	@mkdir -p $(VOLUMES_PATH)/wordpress
 	@mkdir -p $(VOLUMES_PATH)/mariadb
-	docker-compose -f $(DOCKER_COMPOSE_FILE) up --build -d
+	cd srcs && docker-compose -f docker-compose.yml --env-file .env up --build -d
 
 up:
 	@echo "Starting containers..."
-	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+	cd srcs && docker-compose -f docker-compose.yml --env-file .env up -d
 
 down:
 	@echo "Stopping containers..."
-	docker-compose -f $(DOCKER_COMPOSE_FILE) down
+	cd srcs && docker-compose -f docker-compose.yml --env-file .env down
 
 stop:
 	@echo "Stopping containers..."
-	docker-compose -f $(DOCKER_COMPOSE_FILE) stop
+	cd srcs && docker-compose -f docker-compose.yml --env-file .env stop
 
 restart: down up
 
@@ -47,6 +47,6 @@ fclean: clean
 re: fclean all
 
 logs:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
+	cd srcs && docker-compose -f docker-compose.yml --env-file .env logs -f
 
 .PHONY: all build up down stop restart clean fclean re logs

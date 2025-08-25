@@ -6,7 +6,7 @@ if [ ! -f /etc/nginx/ssl/inception.crt ]; then
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -keyout /etc/nginx/ssl/inception.key \
         -out /etc/nginx/ssl/inception.crt \
-        -subj "/C=FI/ST=Uusimaa/L=Helsinki/O=42Helsinki/OU=Student/CN=${DOMAIN_NAME}"
+        -subj "/C=FI/ST=Uusimaa/L=Helsinki/O=42Helsinki/OU=Student/CN=${DOMAIN_NAME:-djelacik.42.fr}"
 fi
 
 # Test nginx configuration

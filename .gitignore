@@ -17,10 +17,8 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Note: .env is included for development convenience in private repo
-# Remove .env from tracking before school evaluation:
-# git rm --cached srcs/.env
-# echo "srcs/.env" >> .gitignore
+# Environment files with sensitive data
+srcs/.env
 
 # Real secrets (if using production secrets)
 secrets/*.key
