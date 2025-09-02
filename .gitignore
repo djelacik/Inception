@@ -1,4 +1,4 @@
-# Inception Project - Development Environment
+Inception Project - Development Environment
 
 # Ignore OS-specific files
 .DS_Store
@@ -18,8 +18,8 @@ Thumbs.db
 *.temp
 
 # Environment files with sensitive data
-srcs/.env
+# srcs/.env (commented out - .env is now in git)
 
 # Real secrets (if using production secrets)
-secrets/*.key
-secrets/*.pem
+# secrets/*.key
+# secrets/*.pem
