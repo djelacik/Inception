@@ -23,3 +23,5 @@ srcs/.env
 # Real secrets (if using production secrets)
 secrets/*.key
 secrets/*.pem
+srcs/.env
+secrets/*
