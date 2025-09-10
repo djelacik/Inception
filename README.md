@@ -1,66 +1,108 @@
-# Inception Project
+# Inception
 
-This project implements a multi-container Docker infrastructure with:
-- NGINX with TLS (only TLSv1.2/TLSv1.3)
-- WordPress + PHP-FPM
-- MariaDB
+**System Administration Docker Exercise**  
+Version: 3
 
-## Requirements
-- Docker
-- Docker Compose
-- Make
+## Projektin kuvaus
 
-## Setup
+Tämä projekti toteuttaa pienen Docker-infrastruktuurin, jossa on kolme palvelua:
+- **NGINX** (vain TLSv1.2/1.3, portti 443)
+- **WordPress + PHP-FPM**
+- **MariaDB**
 
-1. Clone the repository
-2. Update the domain name in `srcs/.env` to match your login
-3. Add domain to your hosts file:
+Kaikki palvelut pyörivät omissa konteissaan, ja tiedot tallennetaan volyymeihin. Palvelut kommunikoivat Docker-verkon kautta.
+
+## Hakemistorakenne
+
+```
+Inception/
+├── Makefile
+├── secrets/           # Salasanat ja tunnukset (ei gitissä)
+├── srcs/
+│   ├── .env           # Ympäristömuuttujat (ei gitissä)
+│   ├── docker-compose.yml
+│   └── requirements/
+│       ├── mariadb/
+│       ├── nginx/
+│       └── wordpress/
+└── .gitignore
+```
+
+## Käyttöönotto
+
+1. **Kloonaa repo:**
+   ```bash
+   git clone git@github.com:djelacik/Inception.git
+   cd Inception
    ```
-   echo "127.0.0.1 yourdomain.42.fr" | sudo tee -a /etc/hosts
+
+2. **Lisää domain hosts-tiedostoon:**
+   ```bash
+   echo "127.0.0.1 <login>.42.fr" | sudo tee -a /etc/hosts
    ```
-4. Build and run:
+
+3. **Luo data-hakemistot:**
+   ```bash
+   sudo mkdir -p /home/<login>/data/{wordpress,mariadb}
+   sudo chown -R <login>:<login> /home/<login>/data
    ```
+
+4. **Lisää .env ja secrets-tiedostot (ei gitissä):**
+   - Kopioi mallipohjat ja täytä omilla arvoilla.
+   - Älä lisää näitä git-repoon.
+
+5. **Käynnistä palvelut:**
+   ```bash
    make
    ```
 
-## Important Notes
+6. **Avaa selaimessa:**
+   - https://<login>.42.fr
 
-### For School Evaluation
-Before submitting or evaluating at school:
-1. Remove the `.env` file from git tracking
-2. Create data directories manually on the evaluation machine
-3. Update domain name and paths as needed
+## Ympäristömuuttujat ja salaisuudet
 
-### Environment Variables
-The `.env` file contains development credentials. For production/evaluation:
-- Use Docker secrets properly
-- Never commit real credentials to git
-- Update paths to match the evaluation environment
+- `.env` sisältää kaikki tarvittavat muuttujat (domain, db, wp).
+- `secrets/` sisältää salasanat ja tunnukset.
+- **Älä lisää näitä git-repoon!**  
+  Lisää `.env` ja `secrets/*` .gitignoreen.
 
-## Commands
+## Makefile-komennot
 
-- `make` or `make build` - Build and start all containers
-- `make up` - Start existing containers
-- `make down` - Stop containers
-- `make restart` - Restart all containers  
-- `make clean` - Remove containers and images
-- `make fclean` - Remove everything including volumes
-- `make logs` - View container logs
+- `make` / `make build` — Rakentaa ja käynnistää kontit
+- `make up` — Käynnistää kontit
+- `make down` — Sammuttaa kontit
+- `make restart` — Uudelleenkäynnistää kontit
+- `make clean` — Poistaa kontit ja imaget
+- `make fclean` — Poistaa myös datavolyymin
+- `make logs` — Näyttää konttien lokit
 
-## Architecture
+## Turvallisuus
 
-```
-Internet -> NGINX (443/TLS) -> WordPress (PHP-FPM) -> MariaDB
-                |
-            WordPress Files Volume
-                |
-            MariaDB Data Volume
-```
+- Salasanat ja tunnukset vain secrets-hakemistossa
+- Ei salasanoja Dockerfileissä
+- Vain TLSv1.2/1.3 käytössä
+- Ei host-verkkoa, linkkejä tai tail-hackeja
+- Kontit restarttaa automaattisesti
 
-## Security Features
+## Arviointia varten
 
-- TLS 1.2/1.3 only
-- No passwords in Dockerfiles
-- Docker secrets for sensitive data
-- Non-root containers where possible
-- Proper network isolation
+- Poista `.env` ja `secrets/*` gitistä:
+  ```bash
+  git rm --cached srcs/.env
+  git rm --cached secrets/*
+  echo "srcs/.env" >> .gitignore
+  echo "secrets/*" >> .gitignore
+  git add .gitignore
+  git commit -m "Remove secrets and env from git for evaluation"
+  git push
+  ```
+
+- Varmista, että kaikki toimii puhtaalla VM:llä yllä olevilla ohjeilla.
+
+## Lisäominaisuudet (bonus)
+
+- Voit lisätä esim. Redis, Adminer, FTP, staattinen sivu, monitorointi jne.
+
+---
+
+**Onnea arviointiin ja julkaisuun!**

@@ -18,8 +18,8 @@ Thumbs.db
 *.temp
 
 # Environment files with sensitive data
-# srcs/.env (commented out - .env is now in git)
+srcs/.env 
 
 # Real secrets (if using production secrets)
-# secrets/*.key
-# secrets/*.pem
+secrets/*.key
+secrets/*.pem
