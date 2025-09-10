@@ -25,3 +25,5 @@ secrets/*.key
 secrets/*.pem
 srcs/.env
 secrets/*
+srcs/.env
+secrets/*
