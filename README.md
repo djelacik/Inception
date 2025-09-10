@@ -1,25 +1,23 @@
 # Inception
 
-**System Administration Docker Exercise**  
-Version: 3
+A professional Docker-based infrastructure project for system administration and DevOps reference.
 
-## Projektin kuvaus
+## Project Overview
 
-Tämä projekti toteuttaa pienen Docker-infrastruktuurin, jossa on kolme palvelua:
-- **NGINX** (vain TLSv1.2/1.3, portti 443)
-- **WordPress + PHP-FPM**
-- **MariaDB**
+This repository demonstrates a secure, production-like multi-container setup using Docker Compose. The stack includes:
+- **NGINX** (TLSv1.2/1.3 only, HTTPS on port 443)
+- **WordPress** (with PHP-FPM)
+- **MariaDB** (database)
 
-Kaikki palvelut pyörivät omissa konteissaan, ja tiedot tallennetaan volyymeihin. Palvelut kommunikoivat Docker-verkon kautta.
+All services run in dedicated containers, communicate over a custom Docker network, and persist data using volumes.
 
-## Hakemistorakenne
+## Directory Structure
 
 ```
 Inception/
 ├── Makefile
-├── secrets/           # Salasanat ja tunnukset (ei gitissä)
+├── secrets/           # Credentials and passwords (excluded from git)
 ├── srcs/
-│   ├── .env           # Ympäristömuuttujat (ei gitissä)
 │   ├── docker-compose.yml
 │   └── requirements/
 │       ├── mariadb/
@@ -28,81 +26,78 @@ Inception/
 └── .gitignore
 ```
 
-## Käyttöönotto
+## Quick Start
 
-1. **Kloonaa repo:**
+1. **Clone the repository:**
    ```bash
    git clone git@github.com:djelacik/Inception.git
    cd Inception
    ```
 
-2. **Lisää domain hosts-tiedostoon:**
+2. **Add your domain to `/etc/hosts`:**
    ```bash
-   echo "127.0.0.1 <login>.42.fr" | sudo tee -a /etc/hosts
+   echo "127.0.0.1 yourdomain.local" | sudo tee -a /etc/hosts
    ```
 
-3. **Luo data-hakemistot:**
+3. **Create persistent data directories:**
    ```bash
-   sudo mkdir -p /home/<login>/data/{wordpress,mariadb}
-   sudo chown -R <login>:<login> /home/<login>/data
+   sudo mkdir -p /home/$(whoami)/data/{wordpress,mariadb}
+   sudo chown -R $(whoami):$(whoami) /home/$(whoami)/data
    ```
 
-4. **Lisää .env ja secrets-tiedostot (ei gitissä):**
-   - Kopioi mallipohjat ja täytä omilla arvoilla.
-   - Älä lisää näitä git-repoon.
+4. **Configure environment variables and secrets:**
+   - Copy sample `.env` and secrets files (not included in git) and fill in your values.
+   - Do **not** commit these files to git.
 
-5. **Käynnistä palvelut:**
+5. **Build and start the stack:**
    ```bash
    make
    ```
 
-6. **Avaa selaimessa:**
-   - https://<login>.42.fr
+6. **Access your site:**
+   - https://yourdomain.local
 
-## Ympäristömuuttujat ja salaisuudet
+## Makefile Commands
 
-- `.env` sisältää kaikki tarvittavat muuttujat (domain, db, wp).
-- `secrets/` sisältää salasanat ja tunnukset.
-- **Älä lisää näitä git-repoon!**  
-  Lisää `.env` ja `secrets/*` .gitignoreen.
+- `make` / `make build` — Build and start all containers
+- `make up` — Start containers
+- `make down` — Stop containers
+- `make restart` — Restart containers
+- `make clean` — Remove containers and images
+- `make fclean` — Remove containers, images, and persistent data
+- `make logs` — View container logs
 
-## Makefile-komennot
+## Security & Best Practices
 
-- `make` / `make build` — Rakentaa ja käynnistää kontit
-- `make up` — Käynnistää kontit
-- `make down` — Sammuttaa kontit
-- `make restart` — Uudelleenkäynnistää kontit
-- `make clean` — Poistaa kontit ja imaget
-- `make fclean` — Poistaa myös datavolyymin
-- `make logs` — Näyttää konttien lokit
+- All credentials and secrets are stored outside the repository
+- No passwords in Dockerfiles or version control
+- TLS enforced (HTTPS only)
+- Containers restart automatically on failure
+- No host networking, legacy links, or insecure hacks
+- Volumes for persistent data
+- Environment variables for configuration
 
-## Turvallisuus
+## Technologies Used
 
-- Salasanat ja tunnukset vain secrets-hakemistossa
-- Ei salasanoja Dockerfileissä
-- Vain TLSv1.2/1.3 käytössä
-- Ei host-verkkoa, linkkejä tai tail-hackeja
-- Kontit restarttaa automaattisesti
+- Docker & Docker Compose
+- NGINX (Debian/Alpine based)
+- WordPress & PHP-FPM
+- MariaDB
+- Bash scripting
 
-## Arviointia varten
+## Usage as a Reference
 
-- Poista `.env` ja `secrets/*` gitistä:
-  ```bash
-  git rm --cached srcs/.env
-  git rm --cached secrets/*
-  echo "srcs/.env" >> .gitignore
-  echo "secrets/*" >> .gitignore
-  git add .gitignore
-  git commit -m "Remove secrets and env from git for evaluation"
-  git push
-  ```
+This project is designed as a professional example for:
+- DevOps and system administration interviews
+- Demonstrating Docker Compose orchestration
+- Secure multi-service infrastructure setup
+- Custom container builds and automation
 
-- Varmista, että kaikki toimii puhtaalla VM:llä yllä olevilla ohjeilla.
+Feel free to fork, adapt, and use as a template for your own projects.
 
-## Lisäominaisuudet (bonus)
+## License
 
-- Voit lisätä esim. Redis, Adminer, FTP, staattinen sivu, monitorointi jne.
+This project is licensed under the MIT License.
 
 ---
 
-**Onnea arviointiin ja julkaisuun!**
